@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface UploadRepo extends JpaRepository<Codes,Integer > {
-    @Query("select u from Codes u where u.visibility = true order by RAND() limit :size")
+    @Query("select u from Codes u where u.visibility = true order by RANDOM() limit :size")
     List<Codes> findRandomCodes(int size);
 
     @Query("select u from Codes u where u.username = :username")

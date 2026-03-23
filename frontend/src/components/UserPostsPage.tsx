@@ -14,7 +14,7 @@ export function UserPostsPage() {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.post("http://localhost:8080/api/user-posts", {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user-posts`, {
         username,
         password,
       });

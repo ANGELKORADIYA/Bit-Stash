@@ -34,7 +34,7 @@ export function CodeForm() {
       };
 
       const postData = await axios.post(
-        "http://localhost:8080/api/upload",
+        `${import.meta.env.VITE_API_BASE_URL}/api/upload`,
         newPost
       );
       if (postData.data.okk) {

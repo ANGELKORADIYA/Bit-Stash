@@ -5,7 +5,7 @@ import {CodePost} from "../types"
 import { useRef,useCallback } from "react";
 const fetchPosts = async (): Promise<CodePost[]> => {
   try {
-    const response = await axios.get("http://localhost:8080/api/");
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/`);
     const Codes: CodePost[] = response.data.map((code: CodePost) => {
       const date = new Date(code.createdAt);
       const formattedDate = `${date.getDate().toString().padStart(2, "0")}-${(
