@@ -71,15 +71,31 @@ export function CodeForm() {
             <User className="w-4 h-4" />
             <span>Username or Email</span>
           </label>
-          <input
-            type="text"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
-            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required
-          />
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={formData.username}
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
+              className="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/generate-email`);
+                  setFormData({ ...formData, username: response.data });
+                } catch (error) {
+                  toast.error("Failed to generate email");
+                }
+              }}
+              className="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 text-sm border"
+            >
+              Generate
+            </button>
+          </div>
         </div>
 
         <div>

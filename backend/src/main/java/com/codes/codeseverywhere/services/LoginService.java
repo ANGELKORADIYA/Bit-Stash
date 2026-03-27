@@ -37,4 +37,18 @@ public class LoginService {
         }
 
     }
+
+    public String generateUniqueEmail() {
+        String characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        java.util.Random random = new java.util.Random();
+        String email;
+        do {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 10; i++) {
+                sb.append(characters.charAt(random.nextInt(characters.length())));
+            }
+            email = sb.toString() + "@codes.com";
+        } while (loginRepo.findByEmailUsername(email) != null);
+        return email;
+    }
 }

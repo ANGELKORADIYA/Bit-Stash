@@ -9,16 +9,17 @@ export function UserPostsPage() {
   const [posts, setPosts] = useState<CodePost[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [filter, setFilter] = useState("ALL");
 
-  const fetchUserPosts = async () => {
+  const fetchUserPosts = async (currentFilter = filter) => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user-posts`, {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user-posts?filter=${currentFilter}`, {
         username,
         password,
       });
-      setPosts(response.data); // Assuming `posts` is the response
+      setPosts(response.data);
     } catch (error) {
       setError("Failed to fetch posts. Please check your credentials or try again.");
       console.error(error);
@@ -27,10 +28,48 @@ export function UserPostsPage() {
     }
   };
 
+  const handleArchive = async (id: number) => {
+    try {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/archive-code/${id}`, {
+        username,
+        password,
+      });
+      fetchUserPosts();
+    } catch (error) {
+      alert("Failed to archive post");
+    }
+  };
+
+  const handleGrantAccess = async (id: number, email: string) => {
+    try {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/grant-access/${id}?email=${email}`, {
+        username,
+        password,
+      });
+      fetchUserPosts();
+    } catch (error) {
+      alert("Failed to grant access");
+    }
+  };
+
+  const handleRevokeAccess = async (id: number, email: string) => {
+    try {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/revoke-access/${id}?email=${email}`, {
+        username,
+        password,
+      });
+      fetchUserPosts();
+    } catch (error) {
+      alert("Failed to revoke access");
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     fetchUserPosts();
   };
+
+  const filters = ["ALL", "PRIVATE", "SHARED", "PUBLIC", "ARCHIVE", "SHARED_WITH_ME"];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -73,6 +112,27 @@ export function UserPostsPage() {
         </button>
       </form>
 
+      {posts.length > 0 && (
+        <div className="mb-6 flex flex-wrap gap-2">
+          {filters.map((f) => (
+            <button
+              key={f}
+              onClick={() => {
+                setFilter(f);
+                fetchUserPosts(f);
+              }}
+              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                filter === f
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              {f.replace(/_/g, " ")}
+            </button>
+          ))}
+        </div>
+      )}
+
       {loading && <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>}
 
       {error && <div className="text-red-500 text-center">{error}</div>}
@@ -80,7 +140,14 @@ export function UserPostsPage() {
       {posts.length > 0 && (
         <div className="space-y-6">
           {posts.map((post, index) => (
-            <CodeCard key={index} post={post} />
+            <CodeCard 
+              key={post.id || index} 
+              post={post} 
+              showAdminControls={filter !== "SHARED_WITH_ME"}
+              onArchive={handleArchive}
+              onGrantAccess={handleGrantAccess}
+              onRevokeAccess={handleRevokeAccess}
+            />
           ))}
         </div>
       )}

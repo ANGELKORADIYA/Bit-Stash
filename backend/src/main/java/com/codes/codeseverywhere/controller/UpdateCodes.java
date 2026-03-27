@@ -43,13 +43,50 @@ public class UpdateCodes {
         service.saveDB(code);
         return new ResponseEntity<>(new Okk(true),HttpStatus.CREATED);
     }
-    @PostMapping("user-posts")
-    public ResponseEntity<List<Codes>> newUser(@RequestBody Login user) {
-        if(userService.loginSignup(user)==null){
+
+    @PostMapping("/user-posts")
+    public ResponseEntity<List<Codes>> userPosts(@RequestBody Login user, @RequestParam(defaultValue = "ALL") String filter) {
+        Login authenticated = userService.loginSignup(user);
+        if(authenticated == null){
             return new ResponseEntity<>(Collections.emptyList(),HttpStatus.UNAUTHORIZED);
         }
-    else{
-            return new ResponseEntity<>(service.getCodesById(user.getUsername()),HttpStatus.OK);
+        
+        if ("SHARED_WITH_ME".equalsIgnoreCase(filter)) {
+            return new ResponseEntity<>(service.getSharedWithMe(authenticated.getEmail()), HttpStatus.OK);
         }
+        
+        return new ResponseEntity<>(service.getCodesByStatus(authenticated.getUsername(), filter), HttpStatus.OK);
     }
+
+    @PostMapping("/archive-code/{id}")
+    public ResponseEntity<Codes> archiveCode(@PathVariable Long id, @RequestBody Login user) {
+        Login authenticated = userService.loginSignup(user);
+        if(authenticated == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        
+        Codes archived = service.archiveCode(id, authenticated.getUsername());
+        return archived != null ? new ResponseEntity<>(archived, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @PostMapping("/grant-access/{id}")
+    public ResponseEntity<Codes> grantAccess(@PathVariable Long id, @RequestParam String email, @RequestBody Login user) {
+        Login authenticated = userService.loginSignup(user);
+        if(authenticated == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        
+        Codes updated = service.grantAccess(id, authenticated.getUsername(), email);
+        return updated != null ? new ResponseEntity<>(updated, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/revoke-access/{id}")
+    public ResponseEntity<Codes> revokeAccess(@PathVariable Long id, @RequestParam String email, @RequestBody Login user) {
+        Login authenticated = userService.loginSignup(user);
+        if(authenticated == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        
+        Codes updated = service.revokeAccess(id, authenticated.getUsername(), email);
+        return updated != null ? new ResponseEntity<>(updated, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/generate-email")
+    public ResponseEntity<String> generateEmail() {
+        return new ResponseEntity<>(userService.generateUniqueEmail(), HttpStatus.OK);
+    }
+}

@@ -16,6 +16,12 @@ public class Codes {
     private String title;
     private String description;
     private boolean visibility;
+    private String status; // PUBLIC, PRIVATE, SHARED, ARCHIVE
+
+    @ElementCollection
+    @CollectionTable(name = "code_shares", joinColumns = @JoinColumn(name = "code_id"))
+    @Column(name = "email")
+    private java.util.Set<String> sharedWith = new java.util.HashSet<>();
 
 
 //    @Column(name = "created_at", updatable = false, insertable = false)
@@ -32,6 +38,7 @@ public class Codes {
         this.title = title;
         this.description = description;
         this.visibility = visibility;
+        this.status = visibility ? "PUBLIC" : "PRIVATE";
     }
 
     public String getUsername() {
@@ -98,8 +105,24 @@ public class Codes {
         this.visibility = visibility;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public java.util.Set<String> getSharedWith() {
+        return sharedWith;
+    }
+
+    public void setSharedWith(java.util.Set<String> sharedWith) {
+        this.sharedWith = sharedWith;
+    }
+
     public String toString(){
-        return "name: " + username + " code: " + code + " createdAt: " + createdAt + " type: " + type + " title: " + title + " description: " + description +" visibility: " + visibility;
+        return "name: " + username + " code: " + code + " createdAt: " + createdAt + " type: " + type + " title: " + title + " description: " + description +" visibility: " + visibility + " status: " + status + " sharedWith: " + sharedWith;
     }
 }
 
