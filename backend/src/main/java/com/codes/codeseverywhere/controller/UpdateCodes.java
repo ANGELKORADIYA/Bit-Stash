@@ -67,6 +67,15 @@ public class UpdateCodes {
         return archived != null ? new ResponseEntity<>(archived, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping("/snippets/{id}/unarchive")
+    public ResponseEntity<Codes> unarchiveCode(@PathVariable Long id, @RequestBody Login user) {
+        Login authenticated = userService.loginSignup(user);
+        if(authenticated == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        
+        Codes unarchived = service.unarchiveCode(id, authenticated.getUsername());
+        return unarchived != null ? new ResponseEntity<>(unarchived, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping("/snippets/{id}/share")
     public ResponseEntity<Codes> grantAccess(@PathVariable Long id, @RequestParam String email, @RequestBody Login user) {
         Login authenticated = userService.loginSignup(user);

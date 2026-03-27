@@ -28,11 +28,6 @@ export function UserPostsPage() {
       });
       setPosts(response.data);
       setHasFetched(true);
-      if (response.data.length === 0) {
-        toast.info(`Vault section "${currentFilter.replace(/_/g, " ")}" is empty`);
-      } else if (currentFilter === filter) {
-        toast.success(`Vault Unlocked: ${response.data.length} snippets found`);
-      }
     } catch (error: any) {
       const msg = error.response?.data?.message || "Invalid vault credentials";
       setError(msg);
@@ -53,6 +48,19 @@ export function UserPostsPage() {
       fetchUserPosts();
     } catch (error: any) {
       toast.error("Failed to archive snippet");
+    }
+  };
+
+  const handleUnarchive = async (id: number) => {
+    try {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/snippets/${id}/unarchive`, {
+        username,
+        password,
+      });
+      toast.success("Snippet restored to vault");
+      fetchUserPosts();
+    } catch (error: any) {
+      toast.error("Failed to restore snippet");
     }
   };
 
@@ -134,7 +142,7 @@ export function UserPostsPage() {
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98] flex items-center justify-center space-x-2"
               >
                 {loading ? (
-                  <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
                     <ShieldCheck className="w-5 h-5" />
@@ -151,6 +159,11 @@ export function UserPostsPage() {
         </div>
       ) : (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {loading && (
+            <div className="fixed top-0 left-0 w-full h-1 z-50 bg-blue-50">
+              <div className="h-full bg-blue-600 animate-[loading_1s_ease-in-out_infinite] w-1/3"></div>
+            </div>
+          )}
           <div className="flex items-center justify-between mb-10">
             <div className="flex items-center space-x-4">
               <div className="bg-gray-900 p-3 rounded-2xl text-white shadow-xl">
@@ -217,6 +230,7 @@ export function UserPostsPage() {
                   post={post} 
                   showAdminControls={filter !== "SHARED_WITH_ME"}
                   onArchive={handleArchive}
+                  onUnarchive={handleUnarchive}
                   onGrantAccess={handleGrantAccess}
                   onRevokeAccess={handleRevokeAccess}
                 />

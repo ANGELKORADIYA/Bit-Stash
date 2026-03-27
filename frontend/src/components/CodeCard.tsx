@@ -1,16 +1,17 @@
-import { Clock, Code2, User, Trash2, Share2, X } from 'lucide-react';
+import { Clock, Code2, User, Trash2, Share2, X, ArchiveRestore } from 'lucide-react';
 import type { CodePost } from '../types';
 import { useState } from 'react';
 
 interface CodeCardProps {
   post: CodePost;
   onArchive?: (id: number) => void;
+  onUnarchive?: (id: number) => void;
   onGrantAccess?: (id: number, email: string) => void;
   onRevokeAccess?: (id: number, email: string) => void;
   showAdminControls?: boolean;
 }
 
-export function CodeCard({ post, onArchive, onGrantAccess, onRevokeAccess, showAdminControls }: CodeCardProps) {
+export function CodeCard({ post, onArchive, onUnarchive, onGrantAccess, onRevokeAccess, showAdminControls }: CodeCardProps) {
   const [shareEmail, setShareEmail] = useState("");
 
   return (
@@ -43,6 +44,15 @@ export function CodeCard({ post, onArchive, onGrantAccess, onRevokeAccess, showA
               <Trash2 className="w-5 h-5" />
             </button>
           )}
+          {showAdminControls && onUnarchive && post.status === 'ARCHIVE' && (
+            <button 
+              onClick={() => onUnarchive(post.id)}
+              className="text-gray-400 hover:text-emerald-600 transition-colors duration-200 p-1.5 hover:bg-emerald-50 rounded-lg"
+              title="Restore Snippet"
+            >
+              <ArchiveRestore className="w-5 h-5" />
+            </button>
+          )}
         </div>
       </div>
       
@@ -63,7 +73,7 @@ export function CodeCard({ post, onArchive, onGrantAccess, onRevokeAccess, showA
         </pre>
       </div>
 
-      {showAdminControls && (
+      {showAdminControls && post.status !== 'ARCHIVE' && (
         <div className="border-t pt-4">
           <div className="flex items-center space-x-2 mb-4">
             <input

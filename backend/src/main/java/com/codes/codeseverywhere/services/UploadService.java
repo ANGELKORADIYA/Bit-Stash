@@ -58,6 +58,19 @@ public class UploadService {
         return null;
     }
 
+    public Codes unarchiveCode(Long id, String username) {
+        Codes code = uploadRepo.findById(id).orElse(null);
+        if (code != null && code.getUsername().equals(username)) {
+            if (!code.getSharedWith().isEmpty()) {
+                code.setStatus("SHARED");
+            } else {
+                code.setStatus(code.isVisibility() ? "PUBLIC" : "PRIVATE");
+            }
+            return uploadRepo.save(code);
+        }
+        return null;
+    }
+
     public Codes grantAccess(Long id, String ownerUsername, String shareEmail) {
         Codes code = uploadRepo.findById(id).orElse(null);
         if (code != null && code.getUsername().equals(ownerUsername)) {
