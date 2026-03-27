@@ -5,7 +5,7 @@ import {CodePost} from "../types"
 import { useRef,useCallback } from "react";
 const fetchPosts = async (): Promise<CodePost[]> => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/`);
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/snippets/explore`);
     const Codes: CodePost[] = response.data.map((code: CodePost) => {
       const date = new Date(code.createdAt);
       const formattedDate = `${date.getDate().toString().padStart(2, "0")}-${(
@@ -25,6 +25,9 @@ const fetchPosts = async (): Promise<CodePost[]> => {
     return [];
   }
 };
+import { Link } from "react-router-dom";
+import { Code2, PackageOpen, Plus } from "lucide-react";
+
 export function Dashboard() {
   const [posts, setPosts] = useState<CodePost[]>([]);
   const [loading, setLoading] = useState(false);
@@ -74,6 +77,32 @@ export function Dashboard() {
 
   return (
     <section>
+      <div className="flex items-center space-x-3 mb-8">
+        <div className="bg-blue-600 p-2 rounded-lg text-white shadow-lg">
+          <Code2 className="w-6 h-6" />
+        </div>
+        <h2 className="text-3xl font-black text-gray-800 tracking-tight">Global Snippet Stash</h2>
+      </div>
+
+      {!loading && posts.length === 0 && (
+        <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-16 text-center shadow-sm">
+          <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <PackageOpen className="w-10 h-10 text-gray-300" />
+          </div>
+          <h3 className="text-2xl font-bold text-gray-800 mb-3 tracking-tight">No snippets yet</h3>
+          <p className="text-gray-500 mb-8 max-w-sm mx-auto leading-relaxed">
+            The global stash is empty. Be the first one to share a code snippet with the community!
+          </p>
+          <Link 
+            to="/stash/new" 
+            className="inline-flex items-center space-x-2 bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all hover:scale-105 shadow-lg shadow-blue-200"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Stash First Snippet</span>
+          </Link>
+        </div>
+      )}
+
       <div className="space-y-6">
         {posts.map((post, index) => (
           <CodeCard key={index} post={post} />
@@ -85,14 +114,9 @@ export function Dashboard() {
           )}
         </div>
       </div>
-      <footer className="flex justify-center items-center h-24 bg-gray-800 text-white p-4">
-        {finisiedDatabase && (
-          <button
-            onClick={loadMore}
-            className="px-6 py-3 text-lg bg-blue-500 text-white rounded-lg shadow-md transform transition duration-300 ease-in-out hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            Load More
-          </button>
+      <footer className="flex justify-center items-center h-24 bg-gray-100 text-gray-800 p-4 mt-12 rounded-xl">
+        {finisiedDatabase && posts.length > 0 && (
+          <p className="text-sm font-medium text-gray-500 italic">No more snippets to load.</p>
         )}
       </footer>
     </section>

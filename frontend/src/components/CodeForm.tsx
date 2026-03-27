@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Lock, Code, Type, FileText, User , Eye, Plus, X  } from "lucide-react";
+import { Lock, Code, Type, FileText, User , Eye, Plus, X, Send  } from "lucide-react";
 import type { FormData, ServerCodePost } from "../types";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -54,7 +54,7 @@ export function CodeForm() {
       };
 
       const postData = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/upload`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/snippets/stash`,
         newPost
       );
       if (postData.data.okk) {
@@ -82,9 +82,14 @@ export function CodeForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-lg shadow-md p-6 mb-6"
+      className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 mb-10 transition-all duration-300 hover:border-blue-200"
     >
-      <h2 className="text-2xl font-bold mb-6">Share Your Code</h2>
+      <div className="flex items-center space-x-3 mb-8">
+        <div className="bg-blue-600 p-2 rounded-lg text-white">
+          <Send className="w-6 h-6" />
+        </div>
+        <h2 className="text-3xl font-black text-gray-800 tracking-tight">Stash New Snippet</h2>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
@@ -106,10 +111,10 @@ export function CodeForm() {
               type="button"
               onClick={async () => {
                 try {
-                  const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/generate-email`);
+                  const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/identity/generate`);
                   setFormData({ ...formData, username: response.data });
                 } catch (error) {
-                  toast.error("Failed to generate email");
+                  toast.error("Failed to generate identity");
                 }
               }}
               className="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 text-sm border"
@@ -127,6 +132,7 @@ export function CodeForm() {
           <input
             type="password"
             value={formData.password}
+            autoComplete="new-password"
             onChange={(e) =>
               setFormData({ ...formData, password: e.target.value })
             }

@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.codes</groupId>
-    <artifactId>codeseverywhere</artifactId>
+    <artifactId>bitstash</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>codeseverywhere</name>
-    <description>codeseverywhere</description>
+    <name>BitStash</name>
+    <description>Securely stash and share your code snippets</description>
     <url/>
     <licenses>
         <license/>

@@ -1,8 +1,9 @@
 import { CodeForm } from "./components/CodeForm";
 import { ToastContainer } from "react-toastify";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import { UserPostsPage } from "./components/UserPostsPage";
-import { Dashboard } from "./components/DashBoard"; // Import the new Dashboard component
+import { Dashboard } from "./components/DashBoard";
+import { Documentation } from "./components/Documentation";
 
 function App() {
   return (
@@ -10,28 +11,33 @@ function App() {
       <div className="min-h-screen bg-gray-100">
         <header className="bg-white shadow-sm sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity">
-              <img src="/logo.svg" alt="CodeShare Logo" className="w-10 h-10" />
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                CodeShare
+            <Link to="/explore" className="flex items-center space-x-3 hover:scale-105 transition-transform duration-200">
+              <img src="/logo.svg" alt="BitStash Logo" className="w-10 h-10" />
+              <h1 className="text-2xl font-black bg-gradient-to-r from-blue-600 to-indigo-800 bg-clip-text text-transparent tracking-tight">
+                BitStash
               </h1>
             </Link>
-            
+
             <nav>
               <ul className="flex items-center space-x-6">
                 <li>
-                  <Link to="/" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">
-                    Home
+                  <Link to="/explore" className="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">
+                    Explore
                   </Link>
                 </li>
                 <li>
-                  <Link to="/share-code" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">
-                    Share Code
+                  <Link to="/stash/new" className="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">
+                    Stash New
                   </Link>
                 </li>
                 <li>
-                  <Link to="/user-posts" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">
-                    My Posts
+                  <Link to="/vault" className="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">
+                    My Vault
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/docs" className="bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 font-medium transition-all duration-200 shadow-sm hover:shadow-md">
+                    Docs
                   </Link>
                 </li>
               </ul>
@@ -39,27 +45,19 @@ function App() {
           </div>
         </header>
 
-        <ToastContainer />
+        <ToastContainer position="bottom-right" theme="colored" />
 
         <main className="max-w-4xl mx-auto px-4 py-8">
           <Routes>
-            {/* Home Route - displaying posts */}
-            <Route
-              path="/"
-              element={
-                <Dashboard />
-              }
-            />
-
-            {/* Share Code Route - the form to submit new code */}
-            <Route path="/share-code" element={<CodeForm />} />
-            <Route path="/user-posts" element={<UserPostsPage />} />  {/* New Route */}
-
+            <Route path="/" element={<Navigate to="/explore" replace />} />
+            <Route path="/explore" element={<Dashboard />} />
+            <Route path="/stash/new" element={<CodeForm />} />
+            <Route path="/vault" element={<UserPostsPage />} />
+            <Route path="/docs" element={<Documentation />} />
           </Routes>
         </main>
       </div>
     </Router>
   );
 }
-
 export default App;
