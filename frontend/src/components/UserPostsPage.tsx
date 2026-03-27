@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { CodeCard } from "./CodeCard";
 import type { CodePost } from "../types";
+import { toast } from "react-toastify";
 
 export function UserPostsPage() {
   const [username, setusername] = useState("");
@@ -10,8 +11,13 @@ export function UserPostsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState("ALL");
+  const [hasFetched, setHasFetched] = useState(false);
 
   const fetchUserPosts = async (currentFilter = filter) => {
+    if (!username || !password) {
+      toast.error("Please enter both username and password");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
@@ -20,8 +26,16 @@ export function UserPostsPage() {
         password,
       });
       setPosts(response.data);
-    } catch (error) {
-      setError("Failed to fetch posts. Please check your credentials or try again.");
+      setHasFetched(true);
+      if (response.data.length === 0) {
+        toast.info(`No posts found for filter: ${currentFilter.replace(/_/g, " ")}`);
+      } else {
+        toast.success(`Fetched ${response.data.length} posts`);
+      }
+    } catch (error: any) {
+      const msg = error.response?.data?.message || "Failed to fetch posts. Check credentials.";
+      setError(msg);
+      toast.error(msg);
       console.error(error);
     } finally {
       setLoading(false);
@@ -34,9 +48,10 @@ export function UserPostsPage() {
         username,
         password,
       });
+      toast.success("Post archived successfully (Status changed to ARCHIVE)");
       fetchUserPosts();
-    } catch (error) {
-      alert("Failed to archive post");
+    } catch (error: any) {
+      toast.error("Failed to archive post");
     }
   };
 
@@ -46,9 +61,10 @@ export function UserPostsPage() {
         username,
         password,
       });
+      toast.success(`Access granted to ${email}`);
       fetchUserPosts();
-    } catch (error) {
-      alert("Failed to grant access");
+    } catch (error: any) {
+      toast.error("Failed to grant access");
     }
   };
 
@@ -58,9 +74,10 @@ export function UserPostsPage() {
         username,
         password,
       });
+      toast.success(`Access revoked for ${email}`);
       fetchUserPosts();
-    } catch (error) {
-      alert("Failed to revoke access");
+    } catch (error: any) {
+      toast.error("Failed to revoke access");
     }
   };
 
@@ -112,7 +129,7 @@ export function UserPostsPage() {
         </button>
       </form>
 
-      {posts.length > 0 && (
+      {hasFetched && (
         <div className="mb-6 flex flex-wrap gap-2">
           {filters.map((f) => (
             <button
@@ -135,7 +152,13 @@ export function UserPostsPage() {
 
       {loading && <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>}
 
-      {error && <div className="text-red-500 text-center">{error}</div>}
+      {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+
+      {hasFetched && posts.length === 0 && !loading && (
+        <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg p-12 text-center">
+          <p className="text-gray-500 text-lg">No posts found for "{filter.replace(/_/g, " ")}"</p>
+        </div>
+      )}
 
       {posts.length > 0 && (
         <div className="space-y-6">
