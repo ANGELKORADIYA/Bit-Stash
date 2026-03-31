@@ -26,29 +26,32 @@ export function Documentation() {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="flex items-center space-x-3 mb-8">
-        <BookOpen className="w-10 h-10 text-blue-600" />
-        <h2 className="text-3xl font-bold text-gray-800">BitStash Guide</h2>
+    <div className="max-w-4xl mx-auto px-0 sm:px-4 py-4 sm:py-8">
+      <div className="flex items-center space-x-3 mb-6 sm:mb-8 px-4 sm:px-0">
+        <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600" />
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">BitStash Guide</h2>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 px-4 sm:px-0">
         {sections.map((section, index) => (
-          <div key={index} className="bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
-            <div className="flex items-center space-x-3 mb-4">
-              {section.icon}
-              <h3 className="text-xl font-bold text-gray-800">{section.title}</h3>
+          <div key={index} className="bg-white p-5 sm:p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+            <div className="flex items-center space-x-3 mb-3 sm:mb-4">
+              <div className="flex-shrink-0">{section.icon}</div>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800">{section.title}</h3>
             </div>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
               {section.content}
             </p>
           </div>
         ))}
       </div>
 
-      <div className="mt-12 p-6 bg-blue-50 rounded-xl border border-blue-100">
-        <h4 className="font-bold text-blue-800 mb-2">Pro Tip:</h4>
-        <p className="text-blue-700">
+      <div className="mt-8 sm:mt-12 p-5 sm:p-6 bg-blue-50 rounded-xl border border-blue-100 mx-4 sm:mx-0">
+        <h4 className="font-bold text-blue-800 mb-2 flex items-center">
+          <span className="bg-blue-200 text-blue-800 text-[10px] uppercase px-1.5 py-0.5 rounded mr-2">Pro Tip</span>
+          Guidance:
+        </h4>
+        <p className="text-sm sm:text-base text-blue-700">
           Use the "Generate" button during stashing to create a unique identity for every different project or snippet group you share!
         </p>
       </div>

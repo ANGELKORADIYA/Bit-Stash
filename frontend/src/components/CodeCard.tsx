@@ -15,19 +15,19 @@ export function CodeCard({ post, onArchive, onUnarchive, onGrantAccess, onRevoke
   const [shareEmail, setShareEmail] = useState("");
 
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 p-6 mb-6 group overflow-hidden relative">
-      <div className="flex items-center justify-between mb-5">
+    <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 p-4 sm:p-6 mb-4 sm:mb-6 group overflow-hidden relative">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-5">
         <div className="flex items-center space-x-3">
-          <div className="bg-blue-50 p-2 rounded-lg">
-            <User className="w-5 h-5 text-blue-600" />
+          <div className="bg-blue-50 p-1.5 sm:p-2 rounded-lg">
+            <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-gray-900 leading-tight">{post.username}</span>
-            <span className="text-xs text-gray-500">{post.createdAt}</span>
+            <span className="font-bold text-gray-900 leading-tight text-sm sm:text-base">{post.username}</span>
+            <span className="text-[10px] sm:text-xs text-gray-500">{post.createdAt}</span>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <span className={`text-[10px] uppercase tracking-wider font-black px-2 py-1 rounded-md ${
+        <div className="flex items-center justify-between sm:justify-end space-x-3">
+          <span className={`text-[9px] sm:text-[10px] uppercase tracking-wider font-black px-2 py-1 rounded-md ${
             post.status === 'PUBLIC' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
             post.status === 'PRIVATE' ? 'bg-amber-50 text-amber-700 border border-amber-100' :
             post.status === 'SHARED' ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' :
@@ -35,40 +35,42 @@ export function CodeCard({ post, onArchive, onUnarchive, onGrantAccess, onRevoke
           }`}>
             {post.status}
           </span>
-          {showAdminControls && onArchive && post.status !== 'ARCHIVE' && (
-            <button 
-              onClick={() => onArchive(post.id)}
-              className="text-gray-400 hover:text-rose-600 transition-colors duration-200 p-1.5 hover:bg-rose-50 rounded-lg"
-              title="Archive Snippet"
-            >
-              <Trash2 className="w-5 h-5" />
-            </button>
-          )}
-          {showAdminControls && onUnarchive && post.status === 'ARCHIVE' && (
-            <button 
-              onClick={() => onUnarchive(post.id)}
-              className="text-gray-400 hover:text-emerald-600 transition-colors duration-200 p-1.5 hover:bg-emerald-50 rounded-lg"
-              title="Restore Snippet"
-            >
-              <ArchiveRestore className="w-5 h-5" />
-            </button>
-          )}
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            {showAdminControls && onArchive && post.status !== 'ARCHIVE' && (
+              <button 
+                onClick={() => onArchive(post.id)}
+                className="text-gray-400 hover:text-rose-600 transition-colors duration-200 p-1.5 hover:bg-rose-50 rounded-lg"
+                title="Archive Snippet"
+              >
+                <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+            )}
+            {showAdminControls && onUnarchive && post.status === 'ARCHIVE' && (
+              <button 
+                onClick={() => onUnarchive(post.id)}
+                className="text-gray-400 hover:text-emerald-600 transition-colors duration-200 p-1.5 hover:bg-emerald-50 rounded-lg"
+                title="Restore Snippet"
+              >
+                <ArchiveRestore className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
       
-      <h2 className="text-xl font-black text-gray-800 mb-2 group-hover:text-blue-700 transition-colors">{post.title}</h2>
+      <h2 className="text-lg sm:text-xl font-black text-gray-800 mb-2 group-hover:text-blue-700 transition-colors">{post.title}</h2>
       
-      <div className="flex items-center space-x-2 mb-4">
-        <Code2 className="w-4 h-4 text-blue-500" />
-        <span className="text-[11px] font-bold px-2 py-0.5 bg-gray-100 text-gray-600 rounded uppercase tracking-wide">
+      <div className="flex items-center space-x-2 mb-3 sm:mb-4">
+        <Code2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+        <span className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 bg-gray-100 text-gray-600 rounded uppercase tracking-wide">
           {post.type}
         </span>
       </div>
       
-      <p className="text-gray-600 mb-5 leading-relaxed text-sm">{post.description}</p>
+      <p className="text-gray-600 mb-4 sm:mb-5 leading-relaxed text-xs sm:text-sm">{post.description}</p>
       
       <div className="relative">
-        <pre className="bg-gray-900 text-gray-100 p-5 rounded-xl overflow-x-auto mb-4 font-mono text-sm leading-relaxed border border-gray-800 shadow-inner">
+        <pre className="bg-gray-900 text-gray-100 p-4 sm:p-5 rounded-xl overflow-x-auto mb-4 font-mono text-xs sm:text-sm leading-relaxed border border-gray-800 shadow-inner max-h-96">
           <code className="block">{post.code}</code>
         </pre>
       </div>

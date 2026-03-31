@@ -82,13 +82,13 @@ export function CodeForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 mb-10 transition-all duration-300 hover:border-blue-200"
+      className="bg-white rounded-2xl shadow-xl border border-gray-100 p-5 sm:p-8 mb-6 sm:mb-10 transition-all duration-300 hover:border-blue-200"
     >
-      <div className="flex items-center space-x-3 mb-8">
-        <div className="bg-blue-600 p-2 rounded-lg text-white">
-          <Send className="w-6 h-6" />
+      <div className="flex items-center space-x-3 mb-6 sm:mb-8">
+        <div className="bg-blue-600 p-1.5 sm:p-2 rounded-lg text-white">
+          <Send className="w-5 h-5 sm:w-6 sm:h-6" />
         </div>
-        <h2 className="text-3xl font-black text-gray-800 tracking-tight">Stash New Snippet</h2>
+        <h2 className="text-2xl sm:text-3xl font-black text-gray-800 tracking-tight">Stash New Snippet</h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

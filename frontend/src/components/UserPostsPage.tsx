@@ -98,40 +98,40 @@ export function UserPostsPage() {
   const filters = ["ALL", "PRIVATE", "SHARED", "PUBLIC", "ARCHIVE", "SHARED_WITH_ME"];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-0 sm:px-4 py-4 sm:py-8">
       {!hasFetched ? (
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-          <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-            <div className="bg-gradient-to-br from-gray-900 to-blue-900 p-8 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-2xl backdrop-blur-sm mb-4 border border-white/20">
-                <Lock className="w-8 h-8 text-white" />
+        <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
+          <div className="w-full max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+            <div className="bg-gradient-to-br from-gray-900 to-blue-900 p-6 sm:p-8 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-white/10 rounded-xl sm:rounded-2xl backdrop-blur-sm mb-4 border border-white/20">
+                <Lock className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <h2 className="text-2xl font-black text-white tracking-tight">Access Your Vault</h2>
-              <p className="text-blue-100/70 text-sm mt-1">Enter your credentials to manage your stash</p>
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Access Your Vault</h2>
+              <p className="text-blue-100/70 text-xs sm:text-sm mt-1">Enter your credentials to manage your stash</p>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-8 space-y-5">
+            <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-4 sm:space-y-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Identity</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Identity</label>
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setusername(e.target.value)}
                   placeholder="Username or Email"
-                  className="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
+                  className="w-full p-3 sm:p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none text-sm sm:text-base"
                   required
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Access Key</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Access Key</label>
                 <input
                   type="password"
                   value={password}
                   autoComplete="current-password"
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Your private password"
-                  className="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
+                  className="w-full p-3 sm:p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none text-sm sm:text-base"
                   required
                 />
               </div>
@@ -139,52 +139,52 @@ export function UserPostsPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98] flex items-center justify-center space-x-2"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 sm:py-4 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98] flex items-center justify-center space-x-2 text-sm sm:text-base"
               >
                 {loading ? (
-                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                    <ShieldCheck className="w-5 h-5" />
+                    <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
                     <span>Unlock Vault</span>
                   </>
                 )}
               </button>
             </form>
           </div>
-          <p className="mt-8 text-sm text-gray-400 flex items-center">
+          <p className="mt-8 text-xs sm:text-sm text-gray-400 flex items-center">
             <Lock className="w-3 h-3 mr-2" />
             End-to-end management of your stashed snippets
           </p>
         </div>
       ) : (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 px-4">
           {loading && (
             <div className="fixed top-0 left-0 w-full h-1 z-50 bg-blue-50">
               <div className="h-full bg-blue-600 animate-[loading_1s_ease-in-out_infinite] w-1/3"></div>
             </div>
           )}
-          <div className="flex items-center justify-between mb-10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10">
             <div className="flex items-center space-x-4">
-              <div className="bg-gray-900 p-3 rounded-2xl text-white shadow-xl">
-                <Database className="w-6 h-6" />
+              <div className="bg-gray-900 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl text-white shadow-xl">
+                <Database className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
               <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight leading-none">My Vault</h2>
-                <p className="text-gray-400 text-sm mt-1 flex items-center uppercase tracking-widest font-bold">
+                <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight leading-none">My Vault</h2>
+                <p className="text-[10px] sm:text-xs text-gray-400 mt-1.5 flex items-center uppercase tracking-widest font-bold">
                   <span className="text-green-500 mr-2">●</span> Active Session: {username}
                 </p>
               </div>
             </div>
             <button 
               onClick={() => { setHasFetched(false); setPosts([]); }}
-              className="text-xs font-black text-gray-400 uppercase hover:text-red-500 transition-colors border-2 border-gray-100 px-4 py-2 rounded-xl"
+              className="w-full sm:w-auto text-[10px] font-black text-gray-400 uppercase hover:text-red-500 transition-colors border-2 border-gray-100 px-4 py-2 rounded-xl"
             >
               Lock Vault
             </button>
           </div>
 
-          <div className="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 mb-8 flex flex-wrap gap-1">
+          <div className="bg-white p-1 sm:p-2 rounded-2xl shadow-sm border border-gray-100 mb-6 sm:mb-8 flex flex-nowrap overflow-x-auto scrollbar-hide gap-1">
             {filters.map((f) => (
               <button
                 key={f}
@@ -192,7 +192,7 @@ export function UserPostsPage() {
                   setFilter(f);
                   fetchUserPosts(f);
                 }}
-                className={`flex-1 min-w-[120px] px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all ${
+                className={`whitespace-nowrap flex-1 min-w-[100px] sm:min-w-[120px] px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-all ${
                   filter === f
                     ? "bg-blue-600 text-white shadow-md shadow-blue-100 scale-[1.02]"
                     : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
